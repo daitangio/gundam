@@ -1,0 +1,15 @@
+[submodule "02-oracle-aq-jms"]
+	path = 02-oracle-aq-jms
+	url = https://github.com/daitangio/oracle-aq-jms.git
+[submodule "01-visual-git-guide"]
+	path = 01-visual-git-guide
+	url = https://github.com/MarkLodato/visual-git-guide
+[submodule "03-gradle-examples"]
+	path = 03-gradle-examples
+	url = https://github.com/daitangio/gradle-test
+[submodule "04-simple-xml-parser"]
+	path = 04-simple-xml-parser
+	url = https://github.com/daitangio/SimpleXMLParser
+[submodule "xx-spring-integration-lmax"]
+	path = xx-spring-integration-lmax
+	url = https://github.com/jbrisbin/si-reactor
