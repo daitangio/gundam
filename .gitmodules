@@ -13,3 +13,9 @@
 [submodule "xx-spring-integration-lmax"]
 	path = xx-spring-integration-lmax
 	url = https://github.com/jbrisbin/si-reactor
+[submodule "05-lmax-distruptor"]
+	path = 05-lmax-distruptor
+	url = https://github.com/LMAX-Exchange/disruptor
+[submodule "06-chaos-monkey"]
+	path = 06-chaos-monkey
+	url = https://github.com/Netflix/SimianArmy
