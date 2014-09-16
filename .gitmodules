@@ -19,3 +19,6 @@
 [submodule "06-chaos-monkey"]
 	path = 06-chaos-monkey
 	url = https://github.com/Netflix/SimianArmy
+[submodule "07-hackathon"]
+	path = 07-hackathon
+	url = https://github.com/daitangio/hackathon2014
