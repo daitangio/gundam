@@ -1,7 +1,7 @@
 gundam
 ======
 
-A set of project based on my experience @ NttData Italy as Solution Architect
+A set of project based on my experience as Java Solution Architect.
 
 
 The project are stored as git submodule
