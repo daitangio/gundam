@@ -1,11 +1,16 @@
 package org.siforge.sm;
 
 
-import java.sql.*;
-// import javax.servlet.http.*;
-import org.apache.log4j.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
-import java.util.ArrayList;
+import org.apache.log4j.Category;
+// import javax.servlet.http.*;
+import org.apache.log4j.Logger;
 
 
 /** SmartSync sincronizza il contenuto di una tabella tra due connessioni JDBC.
@@ -16,7 +21,7 @@ import java.util.ArrayList;
 public class SmartSync {
     
     /** Log dell'istanza */    
-    private Category   log;
+    private Logger   log;
     Connection source,dest;
     int columns=0;
     String targetTable;
@@ -34,7 +39,7 @@ public class SmartSync {
         this.source=srcCon;
         this.dest=destCon;
 
-        this.log = Category.getInstance(logz.getName()+".SmartSync."+tableName);
+        this.log = Logger.getLogger(logz.getName()+".SmartSync."+tableName);
         
         this.targetTable=tableName;
         this.universalSelect="SELECT * FROM "+ this.targetTable;                
@@ -109,6 +114,8 @@ public class SmartSync {
             insertStm.execute();
             rowProcessed++;
         }
+        
+        log.debug("SmartSync->"+targetTable+" Rows Processed:"+rowProcessed);
     }
     
     int findType(int pos){
@@ -200,7 +207,7 @@ public class SmartSync {
         
         
         Connection src=null, dest=null;
-        Category mlog=Category.getInstance("dbaccess.SmartSyncMain.Main");
+        Logger mlog=Logger.getLogger("dbaccess.SmartSyncMain.Main");
         
         try{
             mlog.debug("Getting Connections");
@@ -231,6 +238,11 @@ public class SmartSync {
     }
     
     
+
+    public static void processTables(String t[], Connection src, Connection dest,
+    Logger log) throws SQLException {
+    	processTables(t, src, dest, log, false);
+    }
     
     /** Fornire le tabelle int ordine di CANCELLAZIONE!
      * @param t
@@ -240,13 +252,15 @@ public class SmartSync {
      * @throws SQLException
      */
     public static void processTables(String t[], Connection src, Connection dest,
-    Category log) throws SQLException {
+    Logger log, boolean delete) throws SQLException {
         // Prima esegue il big del:
-        for(int i=0; i<t.length; i++){
-            log.info("Deleting "+t[i]);
-            dest.createStatement().execute("DELETE FROM "+t[i]);
-        }
-        
+    	if(delete){
+    		log.info("Requested deletation of target db....");
+	        for(int i=0; i<t.length; i++){
+	            log.info("Deleting "+t[i]);
+	            dest.createStatement().execute("DELETE FROM "+t[i]);
+	        }
+    	}        
         SmartSync sm;
         
         for(int i=t.length-1; i>=0; i--){
