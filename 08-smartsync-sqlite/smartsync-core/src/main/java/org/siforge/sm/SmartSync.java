@@ -88,7 +88,7 @@ public class SmartSync {
     
     /** Metodo da chiamare per effettuare una sincronizzazione completa
      */
-    void syncAll() throws SQLException {
+    public void syncAll() throws SQLException {
         log.debug("SmartSync->"+targetTable);
         // Carico e scarico!
         // Ora inizia il ciclo:
