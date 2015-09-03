@@ -19,4 +19,21 @@ public class SyncException extends RuntimeException {
     public SyncException(String msg) {
         super(msg);
     }
+
+	public SyncException() {
+		super();
+	}
+
+	public SyncException(String message, Throwable cause,
+			boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public SyncException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public SyncException(Throwable cause) {
+		super(cause);
+	}
 }

@@ -2,6 +2,7 @@ package com.nttdata.gundam;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,7 +15,7 @@ public class SmartSyncExample1 {
 	private Logger   logger=Logger.getLogger(getClass());
 	public static void main(String[] args) throws ClassNotFoundException
 	{
-		BasicConfigurator.configure();
+		//BasicConfigurator.configure();
 		// load the sqlite-JDBC driver using the current class loader
 		Class.forName("org.sqlite.JDBC");
 		(new SmartSyncExample1()).playDemo();
@@ -28,12 +29,19 @@ public class SmartSyncExample1 {
 			// create a database connection. Exmple of in memory
 			connection = DriverManager.getConnection("jdbc:sqlite:./db1.sqlite");
 			db2=DriverManager.getConnection("jdbc:sqlite:./db2.sqlite");
-			populateDummyData(connection);
-			populateDummyData(db2);
-			db2.prepareStatement("DELETE FROM PERSON").execute();
+			long expectedResult=populateDummyData(connection,21439*3);
+			expectedResult+=populateDummyData(db2,30);
 			logger.info("Db1 and db2 ready. Demo sync db1->db2");
-			SmartSync s1=new SmartSync("PERSON",connection,db2,logger);
+			logger.info("Final size expected:"+expectedResult);
+			SmartSync s1=new SmartSync("PERSON",connection,db2);
 			s1.syncAll();
+			ResultSet rs=db2.prepareStatement("select count(*) AS C from person").executeQuery();
+			rs.next();
+			logger.info("DEST DB SIZE:"+rs.getObject("C"));
+			if(expectedResult==rs.getLong("C") ){
+				logger.info("Smart Sync worked");
+			}
+			
 		}
 		catch(SQLException e)
 		{
@@ -58,21 +66,33 @@ public class SmartSyncExample1 {
 		
 	}
 
-	public void populateDummyData(Connection connection)
+	public long populateDummyData(Connection conn, final int rows2pump)
 			throws SQLException {
-		Statement statement = connection.createStatement();
+		Statement statement = conn.createStatement();
 		statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
 		statement.executeUpdate("drop table if exists person");
 		statement.executeUpdate("create table person (id integer, name string)");
-		statement.executeUpdate("insert into person values(1, 'leo')");
-		statement.executeUpdate("insert into person values(2, 'yui')");
-		ResultSet rs = statement.executeQuery("select * from person");
+		PreparedStatement ps=conn.prepareStatement("insert into person values(?, ?)");
+		// Speed up sqlite
+		conn.setAutoCommit(false);
+		for(int i=1; i<=rows2pump; ){
+			ps.setInt(1, i++);
+			ps.setString(2,
+					(Math.random()>0.5?
+					"Mark":"JJ"));
+			ps.executeUpdate();
+		}
+		conn.commit();
+		ResultSet rs = statement.executeQuery("select count(*) AS C from person");
+		long personTableSize=-1;
 		while(rs.next())
 		{
-			// read the result set
-			System.out.println("name = " + rs.getString("name"));
-			System.out.println("id = " + rs.getInt("id"));
+			personTableSize = rs.getLong("C");
+			logger.info(" Persons:"+personTableSize);		
+			
 		}
+		return personTableSize;
+		
 	}
 }
