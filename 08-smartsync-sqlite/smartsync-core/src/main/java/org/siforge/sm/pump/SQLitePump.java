@@ -4,6 +4,13 @@ import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+import org.siforge.sm.SyncException;
+
+/**
+ * Ideal for backup: you can easily bring a source database in a sqlite-embedded database out
+ * @author Giorgig
+ *
+ */
 public class SQLitePump extends SmartSyncPump {
 
 	@Override
@@ -20,7 +27,10 @@ public class SQLitePump extends SmartSyncPump {
 		}
 		sql+=")";
 		logger.trace("Generic...."+ sql);
-		destConnection.prepareStatement(sql).execute();
+		int n=destConnection.prepareStatement(sql).executeUpdate();
+//		if(n!=1){
+//			throw new SyncException("Cannot create table");
+//		}
 	}
 
 	

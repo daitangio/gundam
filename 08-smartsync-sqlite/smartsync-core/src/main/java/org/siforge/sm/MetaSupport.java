@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 public class MetaSupport {
 
 	/** Log dell'istanza */
-	protected Logger logger;
+	protected Logger logger=Logger.getLogger(getClass());
 	protected int srcColType[];
 	protected int destColType[];
 

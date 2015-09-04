@@ -45,10 +45,13 @@ public abstract class SmartSyncPump extends MetaSupport {
 					createTable(table, ensurer,rs.getMetaData(),this.getTypes(rs.getMetaData()));
 				}
 			}
+			sc.close();
+			ensurer.close();
 			SmartSyncBulk bulk=new SmartSyncBulk();
 			bulk.setSource(source);
 			bulk.setDestination(destination);
 			bulk.addTables(relations2Sync);
+			bulk.setThreads(8);
 			bulk.syncAll();
 		} catch (SQLException e) {
 			throw new SyncException(e);

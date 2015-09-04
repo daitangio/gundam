@@ -41,7 +41,7 @@ public class SmartSync extends MetaSupport implements Callable<String>{
 		this.source=srcCon;
 		this.dest=destCon;
 
-		this.logger = Logger.getLogger(getClass());
+		
 
 		this.targetTable=tableName;
 		this.universalSelect="SELECT * FROM "+ this.targetTable;                
@@ -151,7 +151,7 @@ public class SmartSync extends MetaSupport implements Callable<String>{
 		//Confronta srcColType[], destColType[]
 		// UNIMPLEMENTED
 		if(!java.util.Arrays.equals(srcColType,destColType)){
-			logger.warn("Tables Types di not match (on SQLite ignore this warning if dest table is empty)");
+			logger.debug("Tables Types di not match (on SQLite ignore this warning if dest table is empty)");
 		}
 	}
 
