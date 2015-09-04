@@ -38,6 +38,10 @@ public class SmartSyncBulk {
 		relations2Sync.addAll(Arrays.asList(t));
 	}
 	
+	public void addTables(List<String> relations2Sync2) {
+		this.relations2Sync.addAll(relations2Sync2);	
+	}
+	
 	public void syncAll() throws SyncException {
 		try {
 			ForkJoinPool pool = new ForkJoinPool(threads);
@@ -59,4 +63,5 @@ public class SmartSyncBulk {
 			throw new SyncException(e);
 		}
 	}
+	
 }

@@ -21,18 +21,14 @@ import org.apache.log4j.NDC;
  * BUG: Non dovrebbe funzionare con i tipi custom come i  BLOB/CLOB/LOB di Oracle.
  * @author Giovanni Giorgi
  */
-public class SmartSync implements Callable<String>{
+public class SmartSync extends MetaSupport implements Callable<String>{
 
 	/** Every how much time log processed data? */
 	public static final int PERFROMANCE_LOG_SPAN_MS = 1200;
-	/** Log dell'istanza */    
-	private Logger   logger;
 	Connection source,dest;
 	int columns=0;
 	String targetTable;
 	String universalSelect, universalInsert;
-	int srcColType[], destColType[];
-
 	/**
 	 * @param tableName
 	 * @param srcCon
@@ -149,51 +145,6 @@ public class SmartSync implements Callable<String>{
 		return result;
 	}
 
-	int findType(int pos){
-		return this.srcColType[pos-1];
-
-	}
-
-
-	/**
-	 * @param type
-	 * @return
-	 */    
-	private String typeToString(int type) {
-		switch(type) {
-		case java.sql.Types.ARRAY:return "ARRAY";
-		case java.sql.Types.BIGINT: return "BIGINT";
-		case java.sql.Types.BINARY: return "BINARY";
-		case java.sql.Types.BIT: return "BIT";
-		case java.sql.Types.BLOB: return "BLOB";
-		case java.sql.Types.CHAR: return "CHAR";
-		case java.sql.Types.CLOB: return "CLOB";
-		case java.sql.Types.DATE: return "DATE";
-		case java.sql.Types.DECIMAL: return "DECIMAL";
-		case java.sql.Types.DISTINCT: return "DISTINCT";
-		case java.sql.Types.DOUBLE: return "DOUBLE";
-		case java.sql.Types.FLOAT: return "FLOAT";
-		case java.sql.Types.INTEGER: return "INTEGER";
-		case java.sql.Types.JAVA_OBJECT: return "JAVA_OBJECT";
-		case java.sql.Types.LONGVARBINARY: return "LONGVARBINARY";
-		case java.sql.Types.LONGVARCHAR: return "LONGVARCHAR";
-		case java.sql.Types.NULL: return "NULL";
-		case java.sql.Types.NUMERIC: return "NUMERIC";
-		case java.sql.Types.OTHER: return "OTHER";
-		case java.sql.Types.REAL: return "REAL";
-		case java.sql.Types.REF: return "REF";
-		case java.sql.Types.SMALLINT: return "SMALLINT";
-		case java.sql.Types.STRUCT: return "STRUCT";
-		case java.sql.Types.TIME: return "TIME";
-		case java.sql.Types.TIMESTAMP: return "TIMESTAMP";
-		case java.sql.Types.TINYINT: return "TINYINT";
-		case java.sql.Types.VARBINARY: return "VARBINARY";
-		case java.sql.Types.VARCHAR : return "VARCHAR";
-		default:
-			return"UNKNOWN_SQL_TYPE?";
-		} // switch
-	}
-
 	/** Check types and issue some warning
 	 */
 	void checkDestTypes() throws SyncException {
@@ -203,30 +154,6 @@ public class SmartSync implements Callable<String>{
 			logger.warn("Tables Types di not match (on SQLite ignore this warning if dest table is empty)");
 		}
 	}
-
-	/** Questa funzione ritorna i tipi delle colonne  del ResultSetMetaData
-	 * fornito.
-	 * Stampa nel log i tipi, in formato comprensibile
-	 */
-	int [] getTypes(ResultSetMetaData md) throws SQLException {
-		int colType[];
-		int cols=md.getColumnCount();
-
-		colType=new int[cols];
-		int t=0;
-		String msg="  Types:";
-		while(t<cols){
-			// Rec: le pos partono da 1, gli array da zero!
-			colType[t]=md.getColumnType(t+1);
-			msg+=typeToString(colType[t]) + ":";
-			t++;
-		}
-
-		logger.debug(msg);
-		return colType;
-	}
-
-
 
 	/**
 	 * @param args
