@@ -30,6 +30,12 @@ public abstract class SmartSyncPump extends MetaSupport {
 	private int threads = 2;
 	abstract void createTable(String tableName, Connection destConnection, ResultSetMetaData metaData, int... jdbcTypes ) throws SQLException;
 
+	/** Given a file path, give me an happy jdbc string
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	public abstract String jdbcString(String filename) ;
 	public void syncAll(){
 		try{
 			logger.trace("Ensuring all tables are in dest...");
