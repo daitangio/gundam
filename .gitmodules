@@ -22,3 +22,6 @@
 [submodule "07-hackathon"]
 	path = 07-hackathon
 	url = https://github.com/daitangio/hackathon2014
+[submodule "08-smartsync"]
+	path = 08-smartsync
+	url = https://github.com/daitangio/smart-sync
