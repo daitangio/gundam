@@ -14,8 +14,8 @@
     <session-factory>
 
         <!-- Database connection settings -->
-        <property name="connection.driver_class">org.h2.Driver</property>
-        <property name="connection.url">jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE</property>
+        <property name="connection.driver_class">org.sqlite.JDBC</property>
+        <property name="connection.url">jdbc:sqlite:./testhibernate.sqlite</property>
         <property name="connection.username">sa</property>
         <property name="connection.password"/>
 
@@ -23,7 +23,7 @@
         <property name="connection.pool_size">1</property>
 
         <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+        <property name="dialect">org.hibernate.dialect.SQLiteDialect</property>
 
         <!-- Disable the second-level cache  -->
         <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
@@ -35,6 +35,12 @@
         <property name="hbm2ddl.auto">create</property>
 
         <mapping resource="org/hibernate/tutorial/hbm/Event.hbm.xml"/>
+
+		<property name="hibernate.search.default.directory_provider"
+          value="filesystem"/>
+
+		<property name="hibernate.search.default.indexBase"
+          value="./lucene-indexes"/>	
 
     </session-factory>
 

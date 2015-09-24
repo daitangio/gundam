@@ -1,0 +1,5 @@
+/target/
+hibernate-release-5.0.1.Final
+hibernate-release-5.0.1.Final.tgz
+sqlite-dialect-master*
+*.sqlite
