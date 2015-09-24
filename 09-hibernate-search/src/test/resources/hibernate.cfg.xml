@@ -33,14 +33,12 @@
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
+		<property name="hibernate.search.default.directory_provider">filesystem</property>
+
+		<property name="hibernate.search.default.indexBase">./lucene-indexes</property>	
 
         <mapping resource="org/hibernate/tutorial/hbm/Event.hbm.xml"/>
 
-		<property name="hibernate.search.default.directory_provider"
-          value="filesystem"/>
-
-		<property name="hibernate.search.default.indexBase"
-          value="./lucene-indexes"/>	
 
     </session-factory>
 

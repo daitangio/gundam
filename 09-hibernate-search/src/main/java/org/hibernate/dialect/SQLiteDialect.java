@@ -319,10 +319,11 @@ public class SQLiteDialect extends Dialect {
     return true;
   }
 
+  /*
   @Override
   public String getCascadeConstraintsString() {
     return " cascade";
-  }
+  }*/
 
   /* not case insensitive for unicode characters by default (ICU extension needed)
   public boolean supportsCaseInsensitiveLike() {
