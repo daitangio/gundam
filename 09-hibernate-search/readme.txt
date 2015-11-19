@@ -1,0 +1,1 @@
+Hibernate Search + SQL Lite usage example

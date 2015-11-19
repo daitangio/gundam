@@ -3,3 +3,6 @@ hibernate-release-5.0.1.Final
 hibernate-release-5.0.1.Final.tgz
 sqlite-dialect-master*
 *.sqlite
+test.db.h2.db
+test.db.trace.db
+lucene-indexes/

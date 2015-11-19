@@ -25,9 +25,23 @@ package org.hibernate.tutorial.hbm;
 
 import java.util.Date;
 
+import javax.persistence.Id;
+
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+
+
+@Indexed
 public class Event {
+
+	// Marker for Lucene search:
+	@Id
 	private Long id;
 
+	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.YES)
 	private String title;
 	private Date date;
 
@@ -64,4 +78,13 @@ public class Event {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	@Override
+	public String toString() {
+		return "Event [" + (title != null ? "title=" + title + ", " : "")
+				+ (id != null ? "id=" + id + ", " : "")
+				+ (date != null ? "date=" + date : "") + "]";
+	}
+	
+	
 }
